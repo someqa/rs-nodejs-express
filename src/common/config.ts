@@ -23,7 +23,7 @@ const config = {
   PORT,
   NODE_ENV,
   MONGO_CONNECTION_STRING,
-  JWT_SECRET_KEY: JWT_SECRET_KEY || 'default-secret-key',
+  JWT_SECRET_KEY,
   AUTH_MODE: AUTH_MODE === 'true',
   POSTGRES_PORT,
   POSTGRES_USER,
