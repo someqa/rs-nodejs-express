@@ -14,7 +14,7 @@
     "ecmaFeatures": {
       "impliedStrict": true
     },
-    "project": "./tsconfig.json"
+    "project": "./rs-nestjs/tsconfig.json"
   },
   "settings": {
     "noInlineConfig": true,
