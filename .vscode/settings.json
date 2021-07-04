@@ -6,5 +6,6 @@
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "eslint.workingDirectories": ["./rs-nestjs"]
+  "eslint.workingDirectories": ["./rs-nestjs"],
+  "files.eol": "\n"
 }
