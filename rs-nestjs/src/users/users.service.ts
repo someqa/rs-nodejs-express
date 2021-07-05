@@ -4,12 +4,15 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import User from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import Task from 'src/tasks/entities/task.entity';
 //TODO - repository level - check if needed, implement if needed
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepo: Repository<User>,
+    @InjectRepository(Task)
+    private taskRepo: Repository<Task>,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -35,8 +38,7 @@ export class UsersService {
   }
 
   async remove(id: string) {
-    //const taskRepo = getRepository(Task);
     await this.userRepo.delete(id);
-    //await taskRepo.update({ userId: id }, { userId: null });
+    await this.taskRepo.update({ userId: id }, { userId: null });
   }
 }

@@ -10,7 +10,7 @@ class User {
   @Column('text')
   name = 'name';
 
-  @Column({ type: 'text', unique: true })
+  @Column({ type: 'text', unique: false })
   login = 'user';
 
   @Column('text')

@@ -1,3 +1,4 @@
+import Board from './board.entity';
 import {
   Entity,
   Column as ColumnORM,
@@ -5,17 +6,9 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
-// eslint-disable-next-line import/no-cycle
-import Board from '../boards/board.entity';
-
-export interface IColumn {
-  id?: string;
-  title: string;
-  order: number;
-}
 
 @Entity()
-class Column implements IColumn {
+class Column {
   @PrimaryGeneratedColumn('uuid')
   id = uuid();
 

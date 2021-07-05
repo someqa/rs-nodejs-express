@@ -6,9 +6,7 @@ import {
   OneToMany,
   JoinColumn,
 } from 'typeorm';
-// eslint-disable-next-line import/no-cycle
-import Column from '../columns/column.entity';
-// import Task from '../tasks/task.entity';
+import Column from './column.entity';
 
 export interface IBoard {
   id?: string;
