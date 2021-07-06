@@ -11,6 +11,8 @@ import * as winston from 'winston';
 import { BoardsModule } from './boards/boards.module';
 import { TasksModule } from './tasks/tasks.module';
 import { LoggerMiddleware } from './logger-express.middleware';
+import { GlobalExceptionFilter } from './global-exception.filter';
+import { APP_FILTER } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -34,7 +36,13 @@ import { LoggerMiddleware } from './logger-express.middleware';
     UsersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: GlobalExceptionFilter,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   //to uncomment for migrations

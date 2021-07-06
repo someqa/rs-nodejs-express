@@ -28,13 +28,13 @@ export class UsersService {
 
   async findOne(id: string) {
     const user = await this.userRepo.findOne(id);
-    return User.toResponse(user);
+    return user && User.toResponse(user);
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
     await this.userRepo.update(id, updateUserDto);
     const updatedUser = await this.userRepo.findOne({ id });
-    return User.toResponse(updatedUser);
+    return updatedUser && User.toResponse(updatedUser);
   }
 
   async remove(id: string) {
