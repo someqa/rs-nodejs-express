@@ -5,7 +5,8 @@ import User from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import Task from 'src/tasks/entities/task.entity';
-//TODO - repository level - check if needed, implement if needed
+import { hash, compare } from 'bcrypt';
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -16,7 +17,12 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const newUser = this.userRepo.create(createUserDto);
+    const existingUser = await this.userRepo.findOne({
+      login: createUserDto?.login,
+    });
+    if (existingUser) return undefined;
+    const password = await hash(createUserDto.password, 12);
+    const newUser = this.userRepo.create({ ...createUserDto, password });
     const createdUser = await this.userRepo.save(newUser);
     return User.toResponse(createdUser);
   }
@@ -32,7 +38,8 @@ export class UsersService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    await this.userRepo.update(id, updateUserDto);
+    const password = await hash(updateUserDto.password, 12);
+    await this.userRepo.update(id, { ...updateUserDto, password });
     const updatedUser = await this.userRepo.findOne({ id });
     return updatedUser && User.toResponse(updatedUser);
   }
@@ -40,5 +47,13 @@ export class UsersService {
   async remove(id: string) {
     await this.userRepo.delete(id);
     await this.taskRepo.update({ userId: id }, { userId: null });
+  }
+
+  async getAuthenticatedUser(login: string, password: string) {
+    if (!login || !password) return undefined;
+    const user = await this.userRepo.findOne({ login });
+    const match = user && (await compare(password, user.password));
+    const authenticatedUser = match ? user : undefined;
+    return authenticatedUser;
   }
 }

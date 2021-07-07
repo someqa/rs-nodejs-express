@@ -19,8 +19,14 @@ export class UsersController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    const user = await this.usersService.create(createUserDto);
+    if (!user)
+      throw new HttpException(
+        'User creation failed - probably, there is a user with same login',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    return user;
   }
 
   @Get()
