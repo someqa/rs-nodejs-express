@@ -13,6 +13,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { LoggerMiddleware } from './logger-express.middleware';
 import { GlobalExceptionFilter } from './global-exception.filter';
 import { APP_FILTER } from '@nestjs/core';
+import { LoginModule } from './login/login.module';
 
 @Module({
   imports: [
@@ -34,8 +35,10 @@ import { APP_FILTER } from '@nestjs/core';
     BoardsModule,
     TasksModule,
     UsersModule,
+    LoginModule,
   ],
   controllers: [AppController],
+  //to use DI inside filter
   providers: [
     AppService,
     {

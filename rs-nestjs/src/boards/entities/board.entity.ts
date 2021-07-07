@@ -8,14 +8,8 @@ import {
 } from 'typeorm';
 import Column from './column.entity';
 
-export interface IBoard {
-  id?: string;
-  title?: string;
-  columns?: Column[];
-}
-
 @Entity()
-class Board implements IBoard {
+class Board {
   @PrimaryGeneratedColumn('uuid')
   id = uuid();
 
