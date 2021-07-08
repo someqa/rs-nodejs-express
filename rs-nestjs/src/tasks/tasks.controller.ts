@@ -9,12 +9,15 @@ import {
   HttpStatus,
   Put,
   HttpException,
+  UseGuards,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { AuthenticationGuard } from 'src/authentication/authentication.guard';
 
 @Controller('boards/:boardId/tasks')
+@UseGuards(AuthenticationGuard)
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 

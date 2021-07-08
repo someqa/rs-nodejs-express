@@ -33,9 +33,7 @@ export class LoginController {
         HttpStatus.FORBIDDEN,
       );
     const { id } = user;
-    const token = jwt.sign({ login, userId: id }, secretKey, {
-      expiresIn: this.configService.get('JWT_EXPIRES_IN'),
-    });
+    const token = jwt.sign({ login, userId: id }, secretKey);
     return { token };
   }
 }

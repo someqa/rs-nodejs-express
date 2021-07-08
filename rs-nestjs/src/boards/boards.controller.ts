@@ -9,12 +9,15 @@ import {
   HttpStatus,
   Put,
   HttpException,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthenticationGuard } from 'src/authentication/authentication.guard';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 
 @Controller('boards')
+@UseGuards(AuthenticationGuard)
 export class BoardsController {
   constructor(private readonly boardsService: BoardsService) {}
 
