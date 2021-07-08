@@ -1,57 +1,73 @@
-# RS School REST service in docker
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
+</p>
 
-## Как запустить приложение:
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-1. Убедиться, что установлен и работает docker.
+  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+    <p align="center">
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
+<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
+<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
+<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
+<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
+<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
+  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
+    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
+  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
+</p>
+  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
+  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-2. Запустить из командной строки (из директории с файлом docker-compose.yml)
+## Description
 
-```sh
-docker compose up
-```
-3. При необходимости перезапустите приложение следующим образом: (в node 14 не всегда получается корректно запуститься, если файлы БД еще не созданы. Судя по всему, это проблема версии именно node 14+) (скорее всего, это не понадобится, так как реализован reconnect, но всё может быть)
-```sh
-docker compose restart
-```
-После появления файлов для БД проблема исчезает.
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-4. При необходимости **запустить тесты со своей машины**, пожалуйста, установите зависимости с помощью одной из команд:
-```sh
-npm i
-или
-yarn
-```
-node_modules для запуска приложения установлены локально в докере. Для того чтобы сработали модули, запускающие тесты, их нужно поставить на самой машине
+## Installation
 
-**Особенности**: для корректной работы с БД под Windows, убедитесь, пожалуйста, что Docker Desktop работает на основе движка WSL 2. Только в этом случае файлы БД будут корректно мэпиться на файлы в Windows. Иначе нормально запустить Postgres в докере не получится.
-
-![Docker Desktop Settings](https://content.screencast.com/users/OlgaKuksa/folders/Capture/media/ee2c85b7-c4f1-4872-95f0-1846d7dca89b/LWR_Recording.png)
-
-
-## Миграции
-
-Исходный файл миграции находится в папке **src/migrations**. Он запускается в коде после подключения к БД через **connection.runMigrations()** (файл database/index.ts)
-
-- Для того чтобы сгенерировать файлы миграции
-
-```sh
-npm run db:generate
-или
-yarn db:generate
+```bash
+$ npm install
 ```
 
-- Для того чтобы запустить файлы миграции
+## Running the app
 
-```sh
-npm run db:setup
-или
-yarn db:setup
+```bash
+# development
+$ npm run start
+
+# watch mode
+$ npm run start:dev
+
+# production mode
+$ npm run start:prod
 ```
 
-- Для того чтобы откатить миграции
+## Test
 
-```sh
-npm run db:revert
- или
- yarn db:revert
+```bash
+# unit tests
+$ npm run test
+
+# e2e tests
+$ npm run test:e2e
+
+# test coverage
+$ npm run test:cov
 ```
+
+## Support
+
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+
+## Stay in touch
+
+- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
+
+## License
+
+Nest is [MIT licensed](LICENSE).

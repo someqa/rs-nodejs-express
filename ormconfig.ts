@@ -16,7 +16,7 @@ const {
 const typeOrmConfig = {
   type: 'postgres',
   host: POSTGRES_HOST,
-  port: parseInt(POSTGRES_PORT),
+  port: parseInt(POSTGRES_PORT || '5432'),
   username: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
   database: POSTGRES_DB,
