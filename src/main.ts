@@ -1,11 +1,20 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ConfigService } from '@nestjs/config';
+import dotenv from 'dotenv';
+import path from 'path';
+import { FastifyAdapter } from '@nestjs/platform-fastify';
+
+dotenv.config({
+  path: path.join(__dirname, '../../.env'),
+});
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  const configService = app.get(ConfigService);
-  const port = configService.get('PORT');
+  const { PORT, USE_FASTIFY } = process.env;
+  const shouldUseFastify = USE_FASTIFY === 'true';
+  const port = parseInt(PORT || '3000');
+  const app = shouldUseFastify
+    ? await NestFactory.create(AppModule, new FastifyAdapter())
+    : await NestFactory.create(AppModule);
   await app.listen(port);
 }
 bootstrap();
