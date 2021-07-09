@@ -8,8 +8,9 @@ import {
   Put,
   HttpStatus,
   HttpCode,
-  HttpException,
   UseGuards,
+  UnprocessableEntityException,
+  NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -25,11 +26,7 @@ export class UsersController {
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createUserDto: CreateUserDto) {
     const user = await this.usersService.create(createUserDto);
-    if (!user)
-      throw new HttpException(
-        'User creation failed - probably, there is a user with same login',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
+    if (!user) throw new UnprocessableEntityException();
     return user;
   }
 
@@ -42,7 +39,7 @@ export class UsersController {
   async findOne(@Param('id') id: string) {
     const user = await this.usersService.findOne(id);
     if (user) return user;
-    else throw new HttpException('No such user', HttpStatus.NOT_FOUND);
+    else throw new NotFoundException();
   }
 
   @Put(':id')
@@ -53,7 +50,7 @@ export class UsersController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: string) {
-    if (!id) throw new HttpException('User is not found', HttpStatus.NOT_FOUND);
+    if (!id) throw new NotFoundException();
     return this.usersService.remove(id);
   }
 }

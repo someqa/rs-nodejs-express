@@ -8,8 +8,8 @@ import {
   HttpCode,
   HttpStatus,
   Put,
-  HttpException,
   UseGuards,
+  NotFoundException,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -39,7 +39,7 @@ export class TasksController {
   async findOne(@Param('id') id: string) {
     const task = await this.tasksService.findOne(id);
     if (task) return task;
-    else throw new HttpException('No such task', HttpStatus.NOT_FOUND);
+    else throw new NotFoundException();
   }
 
   @Put(':id')

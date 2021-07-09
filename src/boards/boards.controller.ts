@@ -8,8 +8,8 @@ import {
   HttpCode,
   HttpStatus,
   Put,
-  HttpException,
   UseGuards,
+  NotFoundException,
 } from '@nestjs/common';
 import { AuthenticationGuard } from 'src/authentication/authentication.guard';
 import { BoardsService } from './boards.service';
@@ -36,7 +36,7 @@ export class BoardsController {
   async findOne(@Param('id') id: string) {
     const board = await this.boardsService.findOne(id);
     if (board) return board;
-    else throw new HttpException('No such board', HttpStatus.NOT_FOUND);
+    else throw new NotFoundException();
   }
 
   @Put(':id')

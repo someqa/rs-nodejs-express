@@ -38,7 +38,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         ? exception.getResponse()
         : 'Internal server error';
     response.status(status).json({
-      error: errorMessage,
+      errorData: errorMessage,
       statusCode: status,
       timestamp: new Date().toISOString(),
     });

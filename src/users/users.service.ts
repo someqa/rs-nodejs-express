@@ -56,4 +56,8 @@ export class UsersService {
     const authenticatedUser = match ? user : undefined;
     return authenticatedUser;
   }
+
+  async getByLogin(login: string) {
+    return this.userRepo.findOne({ login });
+  }
 }
