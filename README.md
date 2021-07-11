@@ -54,10 +54,10 @@ Express | 204 | 2 | 7231 | 5609 | 46.05
 Fastify | 208 | 2 | 7066 | 5638 | 45.22
 
 Более подробные отчёты можно найти здесь:
-[express in docker report](artillery/docker-reports/express-report.html)
-[fastify in docker report](artillery/docker-reports/fastify-report.html)
-[express on machine report](artillery/machine-reports/express-report.html)
-[fastify on machine report](artillery/machine-reports/fastify-report.html)
+[express in docker report](https://someqa.github.io/rs-nodejs-express/artillery/docker-reports/express-report.html)
+[fastify in docker report](https://someqa.github.io/rs-nodejs-express/artillery/docker-reports/fastify-report.html)
+[express on machine report](https://someqa.github.io/rs-nodejs-express/artillery/machine-reports/express-report.html)
+[fastify on machine report](https://someqa.github.io/rs-nodejs-express/artillery/machine-reports/fastify-report.html)
 
 В общем и целом результаты получились сопоставимые. Fastify смог обработать больше запросов, но время отклика чуть-чуть лучше у Express. По всей видимости, для выбора инструмента имеет смысл прописать более сложный профиль нагрузки в конфиге artillery, постараться сделать его максимально приближенным к реальным условиям - и исходя из результатов выбирать фрэймворк, который будет работать под капотом NestJS.
 
