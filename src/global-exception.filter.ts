@@ -37,7 +37,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       exception instanceof HttpException
         ? exception.getResponse()
         : 'Internal server error';
-    response.status(status).json({
+    response.status(status).send({
       errorData: errorMessage,
       statusCode: status,
       timestamp: new Date().toISOString(),
