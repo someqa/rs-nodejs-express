@@ -7,7 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import typeOrmConfig from 'ormconfig';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
-//import { Connection } from 'typeorm';
+import { Connection } from 'typeorm';
 import { BoardsModule } from './boards/boards.module';
 import { TasksModule } from './tasks/tasks.module';
 import { LoggerMiddleware } from './logger-express.middleware';
@@ -48,9 +48,9 @@ import { LoginModule } from './login/login.module';
   ],
 })
 export class AppModule implements NestModule {
-  //to uncomment for migrations
-  //constructor(private connection: Connection) {}
-  configure(consumer: MiddlewareConsumer) {
+  constructor(private connection: Connection) {}
+  async configure(consumer: MiddlewareConsumer) {
+    await this.connection.runMigrations();
     consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }

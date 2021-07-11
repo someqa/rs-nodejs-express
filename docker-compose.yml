@@ -1,0 +1,32 @@
+version: '3'
+services:
+  node:
+    build: .
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - postgres
+    environment:
+      - PORT:${PORT}
+    volumes:
+      - ./logs:/usr/app/logs
+      - ./src:/usr/app/src
+    restart: always
+    networks:
+      - rsnet
+  postgres:
+    build: ./database
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./postgresDB:/var/lib/postgresql/data/pgdata
+    networks:
+      - rsnet
+networks:
+  rsnet:
+    driver: bridge

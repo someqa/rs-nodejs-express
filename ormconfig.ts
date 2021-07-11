@@ -12,20 +12,19 @@ const {
   POSTGRES_DB,
 } = process.env;
 
-//TODO - set syncronize to false, adjust .env to use docker db
 const typeOrmConfig = {
   type: 'postgres',
-  host: POSTGRES_HOST,
+  host: POSTGRES_HOST || 'localhost',
   port: parseInt(POSTGRES_PORT || '5432'),
   username: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
   database: POSTGRES_DB,
-  synchronize: true,
+  synchronize: false,
   logging: false,
   entities: [join(__dirname, '**', '*.entity.{ts,js}')],
-  //migrations: ['src/migrations/**/*.ts'],
+  migrations: ['database/migrations/*.js'],
   cli: {
-    migrationsDir: 'src/migrations',
+    migrationsDir: 'database/migrations',
   },
 } as ConnectionOptions;
 
