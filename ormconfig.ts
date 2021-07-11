@@ -1,19 +1,31 @@
 import { ConnectionOptions } from 'typeorm';
-import config from './src/common/config';
+import { config } from 'dotenv';
+import { join } from 'path';
+
+config();
+
+const {
+  POSTGRES_HOST,
+  POSTGRES_PORT,
+  POSTGRES_USER,
+  POSTGRES_PASSWORD,
+  POSTGRES_DB,
+} = process.env;
 
 const typeOrmConfig = {
   type: 'postgres',
-  host: config.POSTGRES_HOST,
-  port: config.POSTGRES_PORT,
-  username: config.POSTGRES_USER,
-  password: config.POSTGRES_PASSWORD,
-  database: config.POSTGRES_DB,
+  host: POSTGRES_HOST || 'localhost',
+  port: parseInt(POSTGRES_PORT || '5432', 10),
+  username: POSTGRES_USER,
+  password: POSTGRES_PASSWORD,
+  database: POSTGRES_DB,
   synchronize: false,
   logging: false,
-  entities: ['src/resources/**/*.entity.ts'],
-  migrations: ['src/migrations/**/*.ts'],
+  entities: [join(__dirname, '**', '*.entity.{ts,js}')],
+  migrations: ['database/migrations/*.js'],
   cli: {
-    migrationsDir: 'src/migrations',
+    migrationsDir: 'database/migrations',
   },
 } as ConnectionOptions;
+
 export default typeOrmConfig;

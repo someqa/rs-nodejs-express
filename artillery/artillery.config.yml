@@ -1,0 +1,38 @@
+config:
+  target: http://localhost:4000
+  http:
+    timeout: 30
+  phases:
+    - duration: 20
+      arrivalRate: 50
+      maxVusers: 100
+  defaults:
+    headers:
+      authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6ImFkbWluIiwidXNlcklkIjoiNjBjMWFmM2ItODRiNS00ODg3LTllYjMtMzI4NTAyMDVhNzdiIiwiaWF0IjoxNjI1OTQ4MTMyfQ.Msjew-vPK7sG7AvEF-eUbcwF4yIQXMVn47R6kbZMWNA'
+scenarios:
+  - name: "CRUD user"
+    flow:
+      - get:
+          url: "/users"
+      - post:
+          url: "/users"
+          json:
+            name: "test name"
+            login: "test login {{ $randomString() }}"
+            password: "pwtest"
+          capture:
+            json: "$.id"
+            as: "id"
+      - put:
+          url: "/users/{{id}}"
+          json:
+            name: "test name updated"
+            login: "test login {{ $randomString() }}"
+            password: "pwtest udated"
+      - get:
+          url: "/users/{{id}}"
+      - delete:
+          url: "/users/{{id}}"
+      - get:
+          url: "/users/{{id}}"
+      
