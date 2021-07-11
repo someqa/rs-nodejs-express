@@ -11,10 +11,10 @@ import {
   UseGuards,
   NotFoundException,
 } from '@nestjs/common';
+import { AuthenticationGuard } from 'src/authentication/authentication.guard';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { AuthenticationGuard } from 'src/authentication/authentication.guard';
 
 @Controller('boards/:boardId/tasks')
 @UseGuards(AuthenticationGuard)
@@ -39,7 +39,7 @@ export class TasksController {
   async findOne(@Param('id') id: string) {
     const task = await this.tasksService.findOne(id);
     if (task) return task;
-    else throw new NotFoundException();
+    throw new NotFoundException();
   }
 
   @Put(':id')

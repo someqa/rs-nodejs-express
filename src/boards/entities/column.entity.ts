@@ -1,4 +1,3 @@
-import Board from './board.entity';
 import {
   Entity,
   Column as ColumnORM,
@@ -6,6 +5,8 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
+// eslint-disable-next-line import/no-cycle
+import Board from './board.entity';
 
 @Entity()
 class Column {

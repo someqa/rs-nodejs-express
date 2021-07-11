@@ -6,6 +6,8 @@ import {
   OneToMany,
   JoinColumn,
 } from 'typeorm';
+
+// eslint-disable-next-line import/no-cycle
 import Column from './column.entity';
 
 @Entity()

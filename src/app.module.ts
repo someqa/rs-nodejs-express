@@ -1,18 +1,18 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import typeOrmConfig from 'ormconfig';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { Connection } from 'typeorm';
+import { APP_FILTER } from '@nestjs/core';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { UsersModule } from './users/users.module';
 import { BoardsModule } from './boards/boards.module';
 import { TasksModule } from './tasks/tasks.module';
 import { LoggerMiddleware } from './logger-express.middleware';
 import { GlobalExceptionFilter } from './global-exception.filter';
-import { APP_FILTER } from '@nestjs/core';
 import { LoginModule } from './login/login.module';
 
 @Module({
@@ -38,7 +38,7 @@ import { LoginModule } from './login/login.module';
     LoginModule,
   ],
   controllers: [AppController],
-  //to use DI inside filter
+  // to use DI inside filter
   providers: [
     AppService,
     {
@@ -49,6 +49,7 @@ import { LoginModule } from './login/login.module';
 })
 export class AppModule implements NestModule {
   constructor(private connection: Connection) {}
+
   async configure(consumer: MiddlewareConsumer) {
     await this.connection.runMigrations();
     consumer.apply(LoggerMiddleware).forRoutes('*');

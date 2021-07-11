@@ -17,6 +17,6 @@ export class AuthenticationGuard implements CanActivate {
     const req = context.switchToHttp().getRequest();
     const rawToken = req.headers.authorization;
     if (this.authService.validateToken(rawToken)) return true;
-    else throw new UnauthorizedException();
+    throw new UnauthorizedException();
   }
 }

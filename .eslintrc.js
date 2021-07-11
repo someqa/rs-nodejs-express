@@ -3,16 +3,27 @@ module.exports = {
   parserOptions: {
     project: 'tsconfig.json',
     sourceType: 'module',
+    ecmaVersion: 2021,
+    ecmaFeatures: {
+      impliedStrict: true,
+    },
   },
   plugins: ['@typescript-eslint/eslint-plugin'],
   extends: [
+    'eslint:recommended',
+    'airbnb-typescript/base',
+    'prettier',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
+    'plugin:import/typescript',
   ],
   root: true,
   env: {
     node: true,
     jest: true,
+    es2020: true,
+    jasmine: true,
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
@@ -20,5 +31,15 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    'import/extensions': 'off',
+    'linebreak-style': 'off',
+    'node/no-unsupported-features/es-syntax': 'off',
+    'no-underscore-dangle': 'off',
+    'import/prefer-default-export': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      { argsIgnorePattern: 'next' },
+    ],
+    '@typescript-eslint/no-explicit-any': 2,
   },
 };

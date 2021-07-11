@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import Task from 'src/tasks/entities/task.entity';
 import { Repository } from 'typeorm';
@@ -14,6 +14,7 @@ export class BoardsService {
     @InjectRepository(Task)
     private taskRepo: Repository<Task>,
   ) {}
+
   create(createBoardDto: CreateBoardDto) {
     const newBoard = this.boardRepo.create(createBoardDto);
     return this.boardRepo.save(newBoard);
@@ -36,7 +37,7 @@ export class BoardsService {
       this.boardRepo.merge(dbBoard, updateBoardDto);
       return this.boardRepo.save(dbBoard);
     }
-    //TODO - not found
+    throw new NotFoundException()
   }
 
   async remove(id: string) {

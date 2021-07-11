@@ -36,7 +36,7 @@ export class BoardsController {
   async findOne(@Param('id') id: string) {
     const board = await this.boardsService.findOne(id);
     if (board) return board;
-    else throw new NotFoundException();
+    throw new NotFoundException();
   }
 
   @Put(':id')

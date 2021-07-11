@@ -1,9 +1,15 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { CredentialsDto } from './dto/credentials.dto';
+import {
+  Body,
+  Controller,
+  ForbiddenException,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
-import { LoginGuard } from './login.guard';
 import { UsersService } from 'src/users/users.service';
 import { ConfigService } from '@nestjs/config';
+import { LoginGuard } from './login.guard';
+import { CredentialsDto } from './dto/credentials.dto';
 import { JwtSecretGuard } from './jwtsecret.guard';
 
 @Controller('login')
@@ -13,6 +19,7 @@ export class LoginController {
     private readonly userService: UsersService,
     private readonly configService: ConfigService,
   ) {}
+
   @Post()
   async login(@Body() credentials: CredentialsDto) {
     const secretKey = this.configService.get('JWT_SECRET_KEY');
@@ -23,5 +30,6 @@ export class LoginController {
       const token = jwt.sign({ login, userId: id }, secretKey);
       return { token };
     }
+    throw new ForbiddenException();
   }
 }

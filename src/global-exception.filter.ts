@@ -15,12 +15,13 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
+
   catch(exception: { stack: string | undefined }, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
     const { originalUrl: url, query, body } = request;
-    //logging
+    // logging
     this.logger.error({
       date: Date.now(),
       url,
@@ -28,7 +29,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       body,
       errorStack: exception.stack,
     });
-    //generating response
+    // generating response
     const status =
       exception instanceof HttpException
         ? exception.getStatus()
@@ -42,7 +43,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       statusCode: status,
       timestamp: new Date().toISOString(),
     });
-    //shutdown if exception's uncaught (only HttpException are thrown from modules, QueryFailerErrors can also be handled)
+    // shutdown if exception's uncaught (only HttpException are thrown from modules, QueryFailerErrors can also be handled)
     const isExceptionCaught =
       exception instanceof HttpException ||
       exception instanceof QueryFailedError;

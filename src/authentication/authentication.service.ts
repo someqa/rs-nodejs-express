@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class AuthenticationService {
   constructor(private readonly configService: ConfigService) {}
+
   validateToken(rawToken: string) {
     const secret = this.configService.get('JWT_SECRET_KEY');
     const tokenMatch = rawToken?.match(/(?<=Bearer )(.*)/g);

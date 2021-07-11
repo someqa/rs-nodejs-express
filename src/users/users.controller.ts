@@ -12,10 +12,10 @@ import {
   UnprocessableEntityException,
   NotFoundException,
 } from '@nestjs/common';
+import { AuthenticationGuard } from 'src/authentication/authentication.guard';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { AuthenticationGuard } from 'src/authentication/authentication.guard';
 
 @Controller('users')
 @UseGuards(AuthenticationGuard)
@@ -39,7 +39,7 @@ export class UsersController {
   async findOne(@Param('id') id: string) {
     const user = await this.usersService.findOne(id);
     if (user) return user;
-    else throw new NotFoundException();
+    throw new NotFoundException();
   }
 
   @Put(':id')
