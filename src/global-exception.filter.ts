@@ -9,6 +9,8 @@ import {
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { QueryFailedError } from 'typeorm';
 import { Logger } from 'winston';
+import type { FastifyReply, FastifyRequest } from 'fastify';
+import type { Request, Response } from 'express';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
@@ -18,9 +20,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
   catch(exception: { stack: string | undefined }, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse();
-    const request = ctx.getRequest();
-    const { originalUrl: url, query, body } = request;
+    const response: Response | FastifyReply = ctx.getResponse();
+    const request: Request | FastifyRequest = ctx.getRequest();
+    const { url, query, body } = request;
     // logging
     this.logger.error({
       date: Date.now(),

@@ -1,19 +1,19 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import typeOrmConfig from 'ormconfig';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { Connection } from 'typeorm';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { BoardsModule } from './boards/boards.module';
 import { TasksModule } from './tasks/tasks.module';
-import { LoggerMiddleware } from './logger-express.middleware';
 import { GlobalExceptionFilter } from './global-exception.filter';
 import { LoginModule } from './login/login.module';
+import { LoggerInterceptor } from './logger.interceptor';
 
 @Module({
   imports: [
@@ -45,13 +45,13 @@ import { LoginModule } from './login/login.module';
       provide: APP_FILTER,
       useClass: GlobalExceptionFilter,
     },
+    { provide: APP_INTERCEPTOR, useClass: LoggerInterceptor },
   ],
 })
 export class AppModule implements NestModule {
   constructor(private connection: Connection) {}
 
-  async configure(consumer: MiddlewareConsumer) {
+  async configure() {
     await this.connection.runMigrations();
-    consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }
