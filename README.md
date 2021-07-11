@@ -1,73 +1,63 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# RS School REST service in docker
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Как запустить приложение:
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+1. Убедиться, что установлен и работает docker.
 
-## Description
+2. Запустить из командной строки (из директории с файлом docker-compose.yml)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
+```sh
+docker compose up
 ```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+3. При необходимости **запустить тесты со своей машины**, пожалуйста, установите зависимости с помощью одной из команд:
+```sh
+npm i
+или
+yarn
 ```
+node_modules для запуска приложения установлены локально в докере. Для того чтобы сработали модули, запускающие тесты, их нужно поставить на самой машине
 
-## Test
+**Особенности**: для корректной работы с БД под Windows, убедитесь, пожалуйста, что Docker Desktop работает на основе движка WSL 2. Только в этом случае файлы БД будут корректно мэпиться на файлы в Windows. Иначе нормально запустить Postgres в докере не получится.
 
-```bash
-# unit tests
-$ npm run test
+![Docker Desktop Settings](https://content.screencast.com/users/OlgaKuksa/folders/Capture/media/ee2c85b7-c4f1-4872-95f0-1846d7dca89b/LWR_Recording.png)
 
-# e2e tests
-$ npm run test:e2e
+4. Запускать сервер можно и локально, без докера, предварительно изменив .env файл:
+POSTGRES_HOST=localhost,
+а также выставить соответстующие локальной БД параметры POSTGRES_PORT, POSTGRES_USER,
+POSTGRES_PASSWORD, POSTGRES_DB
 
-# test coverage
-$ npm run test:cov
+
+## Миграции
+
+Исходный файл миграции находится в папке **database/migrations**. Он запускается в коде после подключения к БД через **connection.runMigrations()** (файл src/app.module.ts)
+
+Команды для генерации и отката миграции можно найти в package.json.
+
+## Сравнение производительности Express и Fastify
+
+Для сравнения производительности использовался инструмент Artillery, который действовал по сценарию:
+- получить всех пользователей
+- создать пользователя
+- обновить данные этого пользователя
+- получить этого пользователя
+- удалить пользователя
+- ещё раз запросить этого пользователя и получить 404 ошибку.
+
+```sh
+Параметры: duration: 20, arrivalRate: 50, maxVusers: 100. Подробнее - [конфиг](artillery/artillery.config.yml)
 ```
+Краткое сравнение результатов (запуск в докере на Windows 10/WSL2):
 
-## Support
+Framework name | Scenarios Launched | Median | Max Response Time (ms) | p95 response time (ms) | Mean response (sec)
+--- | --- | --- | --- |--- |---
+Express | 204 | 2 | 7231 | 5609 | 46.05
+Fastify | 208 | 2 | 7066 | 5638 | 45.22
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Более подробные отчёты можно найти здесь:
+[express in docker report](artillery/docker-reports/express-report.html)
+[fastify in docker report](artillery/docker-reports/fastify-report.html)
+[express on machine report](artillery/machine-reports/express-report.html)
+[fastify on machine report](artillery/machine-reports/fastify-report.html)
 
-## Stay in touch
+В общем и целом результаты получились сопоставимые. Fastify смог обработать больше запросов, но время отклика чуть-чуть лучше у Express. По всей видимости, для выбора инструмента имеет смысл прописать более сложный профиль нагрузки в конфиге artillery, постараться сделать его максимально приближенным к реальным условиям - и исходя из результатов выбирать фрэймворк, который будет работать под капотом NestJS.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
